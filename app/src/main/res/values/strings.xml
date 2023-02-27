@@ -1,0 +1,8 @@
+<resources>
+  <string name="app_name">WeatherLens</string>
+  <string name="sunset_icon">Sunset Icon</string>
+  <string name="sunrise_icon">Sunrise Icon</string>
+  <string name="home_icon">Home Icon</string>
+  <string name="sunrise">Sunrise</string>
+  <string name="home">Home</string>
+</resources>
