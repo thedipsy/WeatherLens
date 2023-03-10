@@ -2,6 +2,7 @@ package mk.finki.mpip.weatherlens.presentation
 
 import android.os.Bundle
 import mk.finki.mpip.weatherlens.databinding.ActivityMainBinding
+import mk.finki.mpip.weatherlens.presentation.Home.HomeFragment
 import mk.finki.mpip.weatherlens.presentation.base.BaseActivity
 
 class MainActivity : BaseActivity() {
