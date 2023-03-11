@@ -1,4 +1,4 @@
-package mk.finki.mpip.weatherlens.viewmodels
+package mk.finki.mpip.weatherlens.viewmodels.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,19 +16,21 @@ class HomeViewModel : ViewModel() {
   val data: LiveData<HomeViewState>
     get() = _data
 
-  init {
-    viewModelScope.launch {
-      val response = getWeatherUseCase(
-        41.9981,
-        21.4254,
-        "metric",
-        "8d49837c0b8c8f2adc835804b2cdd0fd"
-      )
+  fun getWeatherData(lat: Double?, lot: Double?) {
+    if (lat != null && lot != null) {
+      viewModelScope.launch {
+        val response = getWeatherUseCase(
+          lat,
+          lot,
+          "metric",
+          "8d49837c0b8c8f2adc835804b2cdd0fd"
+        )
 
-      _data.value = when (response) {
-        is ApiResponse.Complete -> createWeatherContent(response.value)
-        is ApiResponse.Error -> HomeViewState.Error
-        is ApiResponse.Loading -> HomeViewState.Loading
+        _data.value = when (response) {
+          is ApiResponse.Complete -> createWeatherContent(response.value)
+          is ApiResponse.Error -> HomeViewState.Error
+          is ApiResponse.Loading -> HomeViewState.Loading
+        }
       }
     }
   }

@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.LocationServices
 import mk.finki.mpip.weatherlens.databinding.FragmentHomeBinding
-import mk.finki.mpip.weatherlens.viewmodels.HomeViewModel
-import mk.finki.mpip.weatherlens.viewmodels.HomeViewState
+import mk.finki.mpip.weatherlens.viewmodels.home.HomeViewModel
+import mk.finki.mpip.weatherlens.viewmodels.home.HomeViewState
 
 class HomeFragment : Fragment() {
 
@@ -19,6 +20,9 @@ class HomeFragment : Fragment() {
 
   private var binding: FragmentHomeBinding? = null
   private var viewModel: HomeViewModel? = null
+
+  private var lat: Double? = null
+  private var lon: Double? = null
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -30,11 +34,35 @@ class HomeFragment : Fragment() {
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    setUp()
+
+  }
+
+  private fun setUp() {
     viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
     viewModel?.data?.observe(viewLifecycleOwner) { data ->
       updateUi(data)
     }
+
+    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+    fusedLocationClient.lastLocation
+      .addOnSuccessListener { location ->
+        lat = location.latitude
+        lon = location.longitude
+        getWeatherData()
+      }
+
+    binding?.apply {
+      pullToRefresh.setOnRefreshListener {
+        getWeatherData()
+        pullToRefresh.isRefreshing = false;
+      }
+    }
+  }
+
+  private fun getWeatherData() {
+    viewModel?.getWeatherData(lat, lon)
   }
 
   private fun updateUi(data: HomeViewState) {

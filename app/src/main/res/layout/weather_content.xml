@@ -238,7 +238,6 @@
             tools:text="20*"
             android:padding="2dp"
             android:gravity="end"
-            android:textStyle="bold"
             android:textSize="16sp" />
         </LinearLayout>
 
@@ -291,7 +290,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="1*"
-            android:textStyle="bold"
             android:textSize="16sp"
             android:padding="2dp"
             android:gravity="end" />

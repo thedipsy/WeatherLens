@@ -19,7 +19,7 @@ abstract class BaseActivity : AppCompatActivity() {
   }
 
   private fun navigateToHomeOrFinish() {
-    if (supportFragmentManager.backStackEntryCount > 0) {
+    if (supportFragmentManager.backStackEntryCount > 1) {
       supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
       replaceFragment(HomeFragment.createInstance())
     } else {

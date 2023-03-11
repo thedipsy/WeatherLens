@@ -1,4 +1,4 @@
-package mk.finki.mpip.weatherlens.viewmodels
+package mk.finki.mpip.weatherlens.viewmodels.home
 
 import mk.finki.mpip.weatherlens.R
 import mk.finki.mpip.weatherlens.network.models.WeatherResponse
@@ -7,16 +7,22 @@ import java.util.*
 
 class CreateHomeContentData {
 
+  companion object {
+    const val UNIT = "C"
+    const val PERCENT = "%"
+    const val METERS_PER_SECOND = "m/s"
+  }
+
   operator fun invoke(weatherData: WeatherResponse) =
     HomeViewState.WeatherContent(
       weather = weatherData.weather[0].main,
       weatherIcon = getWeatherIcon(weatherData.weather[0].icon),
-      minTemperature = "${weatherData.main.temp_min} C",
-      maxTemperature = "${weatherData.main.temp_max} C",
+      minTemperature = "${weatherData.main.temp_min} $UNIT",
+      maxTemperature = "${weatherData.main.temp_max} $UNIT",
       sunrise = unixTime(weatherData.sys.sunrise),
       sunset = unixTime(weatherData.sys.sunset),
-      humidity = weatherData.main.humidity.toString(),
-      wind = weatherData.wind.speed.toString(),
+      humidity = "${weatherData.main.humidity}$PERCENT",
+      wind = "${weatherData.wind.speed} $METERS_PER_SECOND",
       location = weatherData.sys.country,
       city = weatherData.name
     )
