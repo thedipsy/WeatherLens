@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mk.finki.mpip.weatherlens.domain.GetWeatherUseCase
 import mk.finki.mpip.weatherlens.network.service.ApiResponse
@@ -12,6 +11,7 @@ import mk.finki.mpip.weatherlens.network.service.ApiResponse
 class HomeViewModel : ViewModel() {
 
   private val getWeatherUseCase = GetWeatherUseCase()
+  private val createWeatherContent = CreateHomeContentData()
   private val _data: MutableLiveData<HomeViewState> = MutableLiveData(HomeViewState.Loading)
   val data: LiveData<HomeViewState>
     get() = _data
@@ -26,7 +26,7 @@ class HomeViewModel : ViewModel() {
       )
 
       _data.value = when (response) {
-        is ApiResponse.Complete -> HomeViewState.WeatherContent(response.value.name) //TODO
+        is ApiResponse.Complete -> createWeatherContent(response.value)
         is ApiResponse.Error -> HomeViewState.Error
         is ApiResponse.Loading -> HomeViewState.Loading
       }
@@ -39,6 +39,17 @@ sealed interface HomeViewState {
 
   object Error : HomeViewState
 
-  data class WeatherContent(val text: String) : HomeViewState
+  data class WeatherContent(
+    val weather: String,
+    val weatherIcon: Int,
+    val minTemperature: String,
+    val maxTemperature: String,
+    val sunrise: String,
+    val sunset: String,
+    val humidity: String,
+    val wind: String,
+    val location: String,
+    val city: String
+  ) : HomeViewState
 
 }

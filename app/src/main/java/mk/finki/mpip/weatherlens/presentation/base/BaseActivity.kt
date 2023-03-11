@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import mk.finki.mpip.weatherlens.R
-import mk.finki.mpip.weatherlens.presentation.Home.HomeFragment
+import mk.finki.mpip.weatherlens.presentation.HomeFragment
 
 abstract class BaseActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package mk.finki.mpip.weatherlens.presentation.Home
+package mk.finki.mpip.weatherlens.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -45,20 +45,27 @@ class HomeFragment : Fragment() {
     }
   }
 
-  private fun showContentScreen(data: HomeViewState.WeatherContent) {
+  private fun showContentScreen(weatherData: HomeViewState.WeatherContent) {
     binding?.apply {
-      contentLayout.isVisible = true
+      contentLayout.root.isVisible = true
       loadingLayout.isVisible = false
       errorLayout.isVisible = false
 
-      name.text = data.text
+      contentLayout.tvWeather.text = weatherData.weather
+      contentLayout.ivWeather.setImageResource(weatherData.weatherIcon)
+      contentLayout.tvTemperatureMin.text = weatherData.minTemperature
+      contentLayout.tvTemperatureMax.text = weatherData.maxTemperature
+      contentLayout.tvHumidity.text = weatherData.humidity
+      contentLayout.tvWind.text = weatherData.wind
+      contentLayout.tvLocation.text = weatherData.location
+      contentLayout.tvLocationCity.text = weatherData.city
     }
   }
 
   private fun showLoadingScreen() {
     binding?.apply {
       loadingLayout.isVisible = true
-      contentLayout.isVisible = false
+      contentLayout.root.isVisible = false
       errorLayout.isVisible = false
     }
   }
@@ -67,7 +74,7 @@ class HomeFragment : Fragment() {
     binding?.apply {
       errorLayout.isVisible = true
       loadingLayout.isVisible = false
-      contentLayout.isVisible = false
+      contentLayout.root.isVisible = false
     }
   }
 
