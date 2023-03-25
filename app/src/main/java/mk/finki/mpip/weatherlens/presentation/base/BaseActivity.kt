@@ -36,7 +36,7 @@ abstract class BaseActivity : AppCompatActivity() {
   private fun addFragment(fragment: Fragment, tag: String = fragment::class.java.simpleName) =
     supportFragmentManager
       .beginTransaction()
-      .add(R.id.fragmentContainer, fragment, tag)
+      .replace(R.id.fragmentContainer, fragment, tag)
       .addToBackStack(tag)
       .commit()
 

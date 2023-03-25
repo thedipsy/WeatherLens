@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
+import mk.finki.mpip.weatherlens.R
 import mk.finki.mpip.weatherlens.databinding.FragmentHomeBinding
 import mk.finki.mpip.weatherlens.network.NetworkUtil
 import mk.finki.mpip.weatherlens.viewmodels.home.HomeViewModel
