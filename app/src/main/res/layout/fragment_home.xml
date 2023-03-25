@@ -48,22 +48,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include
       android:id="@+id/error_layout"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:visibility="gone"
+      layout="@layout/content_error" />
 
-      <TextView
-        android:id="@+id/error_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/global_error_message"
-        android:visibility="gone" />
+    <include
+      android:id="@+id/no_network_layout"
+      android:visibility="gone"
+      layout="@layout/content_no_network" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <include
+      android:id="@+id/no_location_layout"
+      android:visibility="gone"
+      layout="@layout/content_no_location" />
   </FrameLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

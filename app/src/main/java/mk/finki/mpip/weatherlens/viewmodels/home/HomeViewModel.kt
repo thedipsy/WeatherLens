@@ -16,8 +16,12 @@ class HomeViewModel : ViewModel() {
   val data: LiveData<HomeViewState>
     get() = _data
 
-  fun getWeatherData(lat: Double?, lot: Double?) {
-    if (lat != null && lot != null) {
+  private val _location: MutableLiveData<Location> = MutableLiveData()
+  val location: LiveData<Location>
+    get() = _location
+
+  fun getWeatherData() {
+    _location.value?.apply {
       viewModelScope.launch {
         val response = getWeatherUseCase(
           lat,
@@ -32,6 +36,16 @@ class HomeViewModel : ViewModel() {
           is ApiResponse.Loading -> HomeViewState.Loading
         }
       }
+    } ?: run {
+      _data.value = HomeViewState.NoLocationEnabled
+    }
+  }
+
+  fun setLocation(latitude: Double?, longitude: Double?) {
+    if (latitude == null || longitude == null) {
+      _location.value = null
+    } else {
+      _location.value = Location(latitude, longitude)
     }
   }
 }
@@ -40,6 +54,8 @@ sealed interface HomeViewState {
   object Loading : HomeViewState
 
   object Error : HomeViewState
+
+  object NoLocationEnabled : HomeViewState
 
   data class WeatherContent(
     val weather: String,
@@ -53,5 +69,9 @@ sealed interface HomeViewState {
     val location: String,
     val city: String
   ) : HomeViewState
-
 }
+
+data class Location(
+  val lat: Double,
+  val lot: Double
+)

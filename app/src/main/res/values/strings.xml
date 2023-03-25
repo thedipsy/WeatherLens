@@ -13,4 +13,13 @@
   <string name="max">Max</string>
   <string name="min">Min</string>
   <string name="weather">Weather</string>
+  <string name="ooops">Ooops...</string>
+  <string name="you_have_no_internet_connection">You have no internet connection.</string>
+  <string name="retry">Retry</string>
+  <string name="your_location_is_turned_off">Your location is turned off.</string>
+  <string name="denied_location_permission">You have denied the location permission.</string>
+  <string name="location_permission">Location Permission</string>
+  <string name="location_permission_rationale_text">Location is needed to retrieve information about weather forcast.</string>
+  <string name="proceed">Proceed</string>
+  <string name="go_to_settings">Please go to settings to\ngrant the permission.</string>
 </resources>

@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
 import mk.finki.mpip.weatherlens.databinding.FragmentHomeBinding
+import mk.finki.mpip.weatherlens.network.NetworkUtil
 import mk.finki.mpip.weatherlens.viewmodels.home.HomeViewModel
 import mk.finki.mpip.weatherlens.viewmodels.home.HomeViewState
 
@@ -21,8 +24,7 @@ class HomeFragment : Fragment() {
   private var binding: FragmentHomeBinding? = null
   private var viewModel: HomeViewModel? = null
 
-  private var lat: Double? = null
-  private var lon: Double? = null
+  private var fusedLocationClient: FusedLocationProviderClient? = null
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -35,34 +37,64 @@ class HomeFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     setUp()
+    getLocation()
+  }
 
+  override fun onDestroyView() {
+    super.onDestroyView()
+    binding = null
   }
 
   private fun setUp() {
-    viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+    setUpViewModel()
+    setUpListeners()
 
+    fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+  }
+
+  private fun setUpViewModel() {
+    viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
     viewModel?.data?.observe(viewLifecycleOwner) { data ->
       updateUi(data)
     }
 
-    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-    fusedLocationClient.lastLocation
-      .addOnSuccessListener { location ->
-        lat = location.latitude
-        lon = location.longitude
-        getWeatherData()
-      }
+    viewModel?.location?.observe(viewLifecycleOwner) { _ ->
+      getWeatherData()
+    }
+  }
 
+  private fun setUpListeners() {
     binding?.apply {
       pullToRefresh.setOnRefreshListener {
-        getWeatherData()
-        pullToRefresh.isRefreshing = false;
+        getLocation()
+        pullToRefresh.isRefreshing = false
+      }
+      noNetworkLayout.btnRetry.setOnClickListener {
+        getLocation()
+      }
+      noLocationLayout.btnRetry.setOnClickListener {
+        getLocation()
+      }
+      errorLayout.btnRetry.setOnClickListener {
+        getLocation()
       }
     }
   }
 
+  private fun getLocation() {
+    fusedLocationClient
+      ?.getCurrentLocation(PRIORITY_HIGH_ACCURACY, null)
+      ?.addOnSuccessListener { location ->
+        viewModel?.setLocation(location?.latitude, location?.longitude)
+      }
+  }
+
   private fun getWeatherData() {
-    viewModel?.getWeatherData(lat, lon)
+    if (NetworkUtil.isOnline(requireContext())) {
+      viewModel?.getWeatherData()
+    } else {
+      showNoConnectivityScreen()
+    }
   }
 
   private fun updateUi(data: HomeViewState) {
@@ -70,6 +102,7 @@ class HomeFragment : Fragment() {
       is HomeViewState.Error -> showErrorScreen()
       is HomeViewState.Loading -> showLoadingScreen()
       is HomeViewState.WeatherContent -> showContentScreen(data)
+      is HomeViewState.NoLocationEnabled -> showNoLocationScreen()
     }
   }
 
@@ -77,7 +110,9 @@ class HomeFragment : Fragment() {
     binding?.apply {
       contentLayout.root.isVisible = true
       loadingLayout.isVisible = false
-      errorLayout.isVisible = false
+      errorLayout.root.isVisible = false
+      noNetworkLayout.root.isVisible = false
+      noLocationLayout.root.isVisible = false
 
       contentLayout.tvWeather.text = weatherData.weather
       contentLayout.ivWeather.setImageResource(weatherData.weatherIcon)
@@ -94,20 +129,39 @@ class HomeFragment : Fragment() {
     binding?.apply {
       loadingLayout.isVisible = true
       contentLayout.root.isVisible = false
-      errorLayout.isVisible = false
+      errorLayout.root.isVisible = false
+      noNetworkLayout.root.isVisible = false
+      noLocationLayout.root.isVisible = false
     }
   }
 
   private fun showErrorScreen() {
     binding?.apply {
-      errorLayout.isVisible = true
+      errorLayout.root.isVisible = true
       loadingLayout.isVisible = false
       contentLayout.root.isVisible = false
+      noNetworkLayout.root.isVisible = false
+      noLocationLayout.root.isVisible = false
     }
   }
 
-  override fun onDestroyView() {
-    super.onDestroyView()
-    binding = null
+  private fun showNoLocationScreen() {
+    binding?.apply {
+      errorLayout.root.isVisible = false
+      loadingLayout.isVisible = false
+      contentLayout.root.isVisible = false
+      noNetworkLayout.root.isVisible = false
+      noLocationLayout.root.isVisible = true
+    }
+  }
+
+  private fun showNoConnectivityScreen() {
+    binding?.apply {
+      noNetworkLayout.root.isVisible = true
+      errorLayout.root.isVisible = false
+      loadingLayout.isVisible = false
+      contentLayout.root.isVisible = false
+      noLocationLayout.root.isVisible = false
+    }
   }
 }
