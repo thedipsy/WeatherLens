@@ -7,14 +7,22 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import mk.finki.mpip.weatherlens.R
+import mk.finki.mpip.weatherlens.repository.ImageCapture
 
 
-class ImageViewAdapter(private val images: List<Bitmap>) :
+class ImageViewAdapter(private val images: List<ImageCapture>? = null) :
   RecyclerView.Adapter<ImageViewAdapter.ViewHolder>() {
 
   private var mClickListener: ItemClickListener? = null
 
-  override fun getItemCount() = images.size
+  private val allImages = ArrayList<ImageCapture>()
+  override fun getItemCount() = allImages.size
+
+  fun updateList(newList: List<ImageCapture>) {
+    allImages.clear()
+    allImages.addAll(newList)
+    notifyDataSetChanged()
+  }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewAdapter.ViewHolder {
     val context = parent.context
@@ -24,7 +32,7 @@ class ImageViewAdapter(private val images: List<Bitmap>) :
   }
 
   override fun onBindViewHolder(viewHolder: ImageViewAdapter.ViewHolder, position: Int) {
-    val imageBitmap: Bitmap = images[position]
+    val imageBitmap: Bitmap = allImages[position].imageBitmap
     viewHolder.imageView.setImageBitmap(imageBitmap)
   }
 
@@ -40,7 +48,7 @@ class ImageViewAdapter(private val images: List<Bitmap>) :
     }
   }
 
-  fun getItem(id: Int) = images[id]
+  fun getItem(id: Int) = allImages[id]
 
   fun setClickListener(itemClickListener: ItemClickListener) {
     this.mClickListener = itemClickListener

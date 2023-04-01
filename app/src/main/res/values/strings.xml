@@ -30,4 +30,5 @@
   <string name="capture_sunrise">Capture sunrise</string>
   <string name="camera_permission">Camera permission</string>
   <string name="capture">Capture</string>
+  <string name="capture_sunset">Capture sunset</string>
 </resources>

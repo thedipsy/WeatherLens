@@ -1,9 +1,10 @@
-package mk.finki.mpip.weatherlens.viewmodels
+package mk.finki.mpip.weatherlens.viewmodels.sunrise
 
 import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import mk.finki.mpip.weatherlens.viewmodels.notifyObserver
 
 class SunriseViewModel : ViewModel() {
 

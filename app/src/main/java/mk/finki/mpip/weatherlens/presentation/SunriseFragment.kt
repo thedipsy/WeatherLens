@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import mk.finki.mpip.weatherlens.R
 import mk.finki.mpip.weatherlens.databinding.FragmentSunriseBinding
-import mk.finki.mpip.weatherlens.viewmodels.SunriseViewModel
+import mk.finki.mpip.weatherlens.viewmodels.sunrise.SunriseViewModel
 
 
 class SunriseFragment : Fragment(), ImageViewAdapter.ItemClickListener {
@@ -78,16 +78,16 @@ class SunriseFragment : Fragment(), ImageViewAdapter.ItemClickListener {
       adapter?.notifyDataSetChanged()
     }
 
-    viewModel?.let {
-      it.images.value?.let { images ->
-        adapter = ImageViewAdapter(images)
-        adapter?.setClickListener(this)
-        binding?.galleryLayout?.apply {
-          sunriseRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-          sunriseRecyclerView.adapter = adapter
-        }
-      }
-    }
+//    viewModel?.let {
+//      it.images.value?.let { images ->
+//        adapter = ImageViewAdapter(images.map }())
+//        adapter?.setClickListener(this)
+//        binding?.galleryLayout?.apply {
+//          sunriseRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+//          sunriseRecyclerView.adapter = adapter
+//        }
+//      }
+  //  }
   }
 
   private fun setUpCameraPermission() =
