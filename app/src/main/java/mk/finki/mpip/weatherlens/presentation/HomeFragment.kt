@@ -123,6 +123,8 @@ class HomeFragment : Fragment() {
       contentLayout.tvWind.text = weatherData.wind
       contentLayout.tvLocation.text = weatherData.location
       contentLayout.tvLocationCity.text = weatherData.city
+      contentLayout.tvSunrise.text = weatherData.sunrise
+      contentLayout.tvSunset.text = weatherData.sunset
     }
   }
 

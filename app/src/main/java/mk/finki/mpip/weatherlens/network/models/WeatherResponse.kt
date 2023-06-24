@@ -14,5 +14,6 @@ data class WeatherResponse(
   val sys: Sys,
   val id: Int,
   val name: String,
-  val cod: Int
+  val cod: Int,
+  val timezone: Int
 ) : Serializable

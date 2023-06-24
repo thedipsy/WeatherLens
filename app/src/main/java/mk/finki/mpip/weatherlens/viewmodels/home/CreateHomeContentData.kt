@@ -36,9 +36,10 @@ class CreateHomeContentData {
   }
 
   private fun unixTime(timex: Long): String {
-    val date = Date(timex)
-    val sdf = SimpleDateFormat("HH:mm")
-    sdf.timeZone = TimeZone.getDefault()
-    return sdf.format(date) ?: ""
+  // Convert the timestamps to Date objects
+    val time = Date(timex * 1000)
+  // Format the Date objects to the desired HH:mm format
+    val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return dateFormat.format(time)
   }
 }
