@@ -59,7 +59,8 @@ class SunsetViewModel(application: Application) : AndroidViewModel(application) 
   private fun getAllImages() {
     viewModelScope.launch(Dispatchers.IO) {
       val allImages = getAllImageCaptures()
-      _images.postValue(allImages)
+      val sunsetImages = allImages.filter { i -> i.type == ImageType.SUNSET }
+      _images.postValue(sunsetImages)
     }
   }
 

@@ -84,7 +84,6 @@ class SunsetFragment : Fragment(), ImageViewAdapter.ItemClickListener {
       sunriseRecyclerView.adapter = adapter
     }
 
-
     viewModel.images.observe(requireActivity()) {
       adapter.updateList(it)
     }

@@ -34,8 +34,8 @@ class SunriseFragment : Fragment(), ImageViewAdapter.ItemClickListener {
   }
 
   private var binding: FragmentSunriseBinding? = null
-  private var viewModel: SunriseViewModel? = null
-  private var adapter: ImageViewAdapter? = null
+  private lateinit var viewModel: SunriseViewModel
+  private lateinit var adapter: ImageViewAdapter
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -73,21 +73,21 @@ class SunriseFragment : Fragment(), ImageViewAdapter.ItemClickListener {
   }
 
   private fun setUpViewModel() {
-    viewModel = ViewModelProvider(this)[SunriseViewModel::class.java]
-    viewModel?.images?.observe(requireActivity()) {
-      adapter?.notifyDataSetChanged()
+    viewModel = ViewModelProvider(
+      this,
+      ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+    )[SunriseViewModel::class.java]
+
+    adapter = ImageViewAdapter()
+      .apply { setClickListener(this@SunriseFragment) }
+    binding?.galleryLayout?.apply {
+      sunriseRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+      sunriseRecyclerView.adapter = adapter
     }
 
-//    viewModel?.let {
-//      it.images.value?.let { images ->
-//        adapter = ImageViewAdapter(images.map }())
-//        adapter?.setClickListener(this)
-//        binding?.galleryLayout?.apply {
-//          sunriseRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-//          sunriseRecyclerView.adapter = adapter
-//        }
-//      }
-  //  }
+    viewModel.images.observe(requireActivity()) {
+      adapter.updateList(it)
+    }
   }
 
   private fun setUpCameraPermission() =
@@ -112,7 +112,7 @@ class SunriseFragment : Fragment(), ImageViewAdapter.ItemClickListener {
     if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
       val extras = data?.extras
       val imageBitmap = extras!!["data"] as Bitmap?
-      viewModel?.addImage(imageBitmap)
+      viewModel.addImage(imageBitmap)
     }
   }
 
